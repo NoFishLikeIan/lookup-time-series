@@ -22,11 +22,18 @@ const dataFromString = (str: string): TimeSeries =>
   );
 
 export const readCsv = async (url: string) => {
-  const resp = await window.fetch(url);
-  const string = await resp.text();
+  try {
+    const resp = await window.fetch(url);
+    const string = await resp.text();
 
-  const data = dataFromString(string);
-  return { data };
+    console.log('Fetched data!')
+
+    const data = dataFromString(string);
+    return { data };
+  } catch (error) {
+    console.warn(error)
+    return { data: [] }
+  }
 };
 
 export type CSVResponse = ThenArg<ReturnType<typeof readCsv>>;

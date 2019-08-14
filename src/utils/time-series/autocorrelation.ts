@@ -3,7 +3,7 @@ import { reduce } from "../../core";
 
 type Series = IterableIterator<number> | number[] | Iterable<number>;
 
-const autocovariance = (mean: number, series: number[], n) => (k: number) => {
+const autocovariance = (mean: number, series: number[], n: number) => (k: number) => {
   const [uppserSum, lowerSum] = reduce(
     ([upper, lower], y, index) => {
       const diff = y - mean;
@@ -23,7 +23,6 @@ export const computeSeriesAutocor = (series: Series) => {
   const n = tx.count(series);
   const mean = sum / n;
   const computeKVariance = autocovariance(mean, [...series], n);
-
   return (orders: Series = tx.range(1, 1200)) =>
     tx.transduce(tx.comp(tx.map(computeKVariance)), tx.push(), orders);
 };
