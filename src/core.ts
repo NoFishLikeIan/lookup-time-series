@@ -22,4 +22,5 @@ export function reduce<T, A>(
   }
 }
 
-export const isTruthy = (q: any) => !!q;
+export const isFalsy = (q: any) => !q;
+export const isTruthy = (q: any) => !isFalsy(q);
