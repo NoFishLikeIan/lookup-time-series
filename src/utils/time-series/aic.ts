@@ -7,7 +7,6 @@ export const AIC = (observations: number[], params: number = 1) => {
 
     // TODO: This needs to be dependents on number of lag, not just simple regression!
     const rss = residualSquared(observations)
-
-    return n * Math.log(reduce(sum, 0, rss) / n) + 2 * params
+    return n * Math.log(reduce(sum(), 0, rss) / n) + 2 * params
 }
 

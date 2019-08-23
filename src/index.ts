@@ -65,10 +65,8 @@ const chart = sync<any, any>({
 
     return svg(
       { width, height },
-      group(
-        line([MARGIN_X, center], [width - MARGIN_X, center], { stroke: 'black' }),
-        mapIndexed((index, corr) => rect([mapXBar(index), center], 20, mapBarHeight(corr)), autocorrelation as number[])
-      ),
+      line([MARGIN_X, center], [width - MARGIN_X, center], { stroke: 'black' }),
+      mapIndexed((index, corr) => rect([mapXBar(index), center], 20, mapBarHeight(corr)), autocorrelation as number[])
     )
 
   })
