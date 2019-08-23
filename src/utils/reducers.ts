@@ -1,14 +1,18 @@
-import { Reducer } from '@thi.ng/transducers'
+import { Reducer, reduce, reducer } from '@thi.ng/transducers'
 import { identity } from '../core';
 
-export const reducerMathAbs: Reducer<number, number> = [
-    () => 0,
-    identity,
-    (max, value) => Math.abs(value) > max ? Math.abs(value) : max
-]
+export function maxAbsolute(): Reducer<number, number>;
+export function maxAbsolute(xs: Iterable<number>): number;
+export function maxAbsolute(xs?: any): any {
+    return xs
+        ? reduce(maxAbsolute(), xs)
+        : reducer(() => -Infinity, (max, value: number) => Math.max(max, Math.abs(value)))
+}
 
-export const sum: Reducer<number, number> = [
-    () => 0,
-    identity,
-    (s, value) => s + value
-] 
+export function sum(): Reducer<number, number>;
+export function sum(xs: Iterable<number>): number;
+export function sum(xs?: any): any {
+    xs
+        ? reduce(sum(), xs)
+        : reducer(() => 0, (total, value: number) => value + total)
+}

@@ -1,10 +1,10 @@
 import * as tx from "@thi.ng/transducers";
-import { reduce } from "../../core";
+import { extendedReduce } from "../../core";
 
 type Series = IterableIterator<number> | number[] | Iterable<number>;
 
 const autocovariance = (mean: number, series: number[], n: number) => (k: number) => {
-  const [uppserSum, lowerSum] = reduce(
+  const [uppserSum, lowerSum] = extendedReduce(
     ([upper, lower], y, index) => {
       const diff = y - mean;
       const nextDiff = series[index + k] - mean;

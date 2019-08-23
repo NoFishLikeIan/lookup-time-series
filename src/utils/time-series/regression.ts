@@ -1,4 +1,4 @@
-import { mean, Reducer, comp, transduce, mapIndexed, reduce, map, push, pairs, zip, range } from '@thi.ng/transducers';
+import { mean, Reducer, comp, transduce, mapIndexed, reduce, map, push, zip, range } from '@thi.ng/transducers';
 import { identity } from '../../core';
 
 const cov = (xbar: number) => (ybar: number): Reducer<number, number[]> => [
