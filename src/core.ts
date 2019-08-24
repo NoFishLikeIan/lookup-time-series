@@ -24,3 +24,4 @@ export function extendedReduce<T, A>(
 
 export const isFalsy = (q: any) => !q;
 export const isTruthy = (q: any) => !isFalsy(q);
+export const constant = <T>(n: T): () => T => () => n
