@@ -1,8 +1,8 @@
 {
-    "name": "crypto-chart",
+    "name": "lookup-time-series",
     "version": "0.0.1",
     "repository": "https://github.com/thi-ng/umbrella",
-    "author": "Karsten Schmidt <k+npm@thi.ng>",
+    "author": "Andrea Titton <andreatitton96@gmail.com>",
     "license": "Apache-2.0",
     "scripts": {
         "clean": "rm -rf .cache build out",
