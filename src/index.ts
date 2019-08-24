@@ -1,7 +1,7 @@
 import { sync, stream, fromEvent, fromPromise } from "@thi.ng/rstream";
 import { map, comp, filter, mapcat, mapIndexed, range, zip, min, max } from "@thi.ng/transducers";
 import { fit } from '@thi.ng/math'
-import { svg, line } from '@thi.ng/hiccup-svg'
+import { canvas } from '@thi.ng/hdom-canvas'
 import { updateDOM } from '@thi.ng/transducers-hdom'
 import { GRADIENTS } from '@thi.ng/color'
 
@@ -9,15 +9,16 @@ import { readCsv } from "./utils/reading/read-csv";
 import { isTruthy } from "./core";
 import { computeSeriesAutocor } from "./utils/time-series/autocorrelation";
 import { extractSeries } from "./utils/reading/read-data";
-import { rect } from "./components/rect";
 import { AIC } from "./utils/time-series/aic";
 import { fitToColor } from "./utils/scales";
 
 const URL = 'https://gist.githubusercontent.com/NoFishLikeIan/0c7f070b056773ca5294bb9767fcbc23/raw/996f26fc4792eb47e252d3cd10c9ecb3f0599722/melbourne.csv'
-const PERIODS = 30
+const PERIODS = 50
 
 const lags = range(PERIODS, 1)
 const fitToOrangeBlue = fitToColor(GRADIENTS['cyan-magenta'])
+
+// TODO: Redraw in canvas
 
 
 const error = stream<any>();
@@ -25,7 +26,7 @@ const error = stream<any>();
 
 error.subscribe({ next: e => alert(`Error: ${e}`) });
 
-const MARGIN_X = 100
+const MARGIN_X = 30
 const MARGIN_Y = 60
 
 const requestData = readCsv(URL)
@@ -79,18 +80,22 @@ const chart = sync<any, any>({
 
     const mapColor = fitToOrangeBlue(min(orderSelection), max(orderSelection))
 
+    const barWidth = 5 // FIXME: dynamic
+
 
     const iter = zip(autocorrelation, orderSelection) as Iterable<[number, number]>
+    return [canvas, { width, height },
+      ["line", { stroke: 'black' }, [MARGIN_X, center], [width - MARGIN_X - barWidth, center]],
 
-    return svg(
-      { width, height },
-      line([MARGIN_X, center], [width - MARGIN_X, center], { stroke: 'black' }),
       mapIndexed(
         (index, [corr, order]: [number, number]) =>
-          rect([mapXBar(index), center], 20, mapBarHeight(corr), { fill: mapColor(order) }),
+          (['g', {},
+            ['rect', { fill: mapColor(order) }, [mapXBar(index), center], barWidth, mapBarHeight(corr)],
+            ["text", { fill: 'black' }, [mapXBar(index), center + 20], `-${PERIODS - index - 1}`]
+          ]),
         iter
       )
-    )
+    ]
 
   })
 })
