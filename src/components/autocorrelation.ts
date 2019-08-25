@@ -18,7 +18,7 @@ interface AutocorrGraphProps {
     mapBarHeight: (y: number, min: number, max: number) => number,
 }
 
-export const autocorrelationGraph = ({
+export const autocorrBarchart = ({
     min,
     max,
     gradients,
@@ -34,9 +34,9 @@ export const autocorrelationGraph = ({
     const from: [number, number] = [MARGIN_X, base]
     const to: [number, number] = [chartW - MARGIN_X - barWidth, base]
 
-    return [
-        ["defs", {}, ['linearGradient', { id: 'aic', from, to }, gradients],],
-        ["rect", { fill: '$aic' }, from, to[0] - from[0], AIC_BAR_H],
+    return {
+        'def': ['linearGradient', { id: 'aic', from: [MARGIN_X, 0], to: [chartW - MARGIN_X - barWidth, 0] }, gradients],
+        'graph': [["rect", { fill: '$aic' }, from, to[0] - from[0], AIC_BAR_H],
         ...mapIndexed(
             (index, [corr, order]) => {
                 const fill = mapColor(order)
@@ -45,14 +45,14 @@ export const autocorrelationGraph = ({
                 const pos = Math.sign(-barHeight)
                 const barOffset = pos < 0 ? 1 : 0
 
-                return ([
-                    // Autocorrelation graph
-                    ['g', {},
-                        ['rect', { fill }, [x, base + barOffset * AIC_BAR_H], barWidth, barHeight],
-                        ["text", { fill: 'black', fontSize: 7 }, [x - barWidth / 2, base + (pos * (AIC_BAR_H + 20))], `-${label(index)}`]
-                    ],
-                ])
+
+
+                return ['g', {},
+                    ['rect', { fill }, [x, base + barOffset * AIC_BAR_H], barWidth, barHeight],
+                    ["text", { fill: 'black', fontSize: 7 }, [x - barWidth / 2, base + (pos * (AIC_BAR_H + 20))], `-${label(index)}`]
+                ]
             },
             iter
         )]
+    }
 }

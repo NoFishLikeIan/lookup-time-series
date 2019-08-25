@@ -1,5 +1,6 @@
 export const identity = <T>(i: T): T => i
 
+
 export function extendedReduce<T, A>(
   fn: (acc: A, value: T, index: number, series?: T[]) => A,
   init: A,

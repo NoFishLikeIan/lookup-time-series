@@ -24,7 +24,7 @@
         "@thi.ng/strings": "latest",
         "@thi.ng/transducers": "latest",
         "@thi.ng/transducers-hdom": "latest",
-        "@thi.ng/transducers-stats": "latest"
+        "@thi.ng/transducers-stats": "^1.1.4"
     },
     "browserslist": [
         "last 3 Chrome versions"

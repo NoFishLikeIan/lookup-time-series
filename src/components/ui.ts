@@ -4,8 +4,8 @@ import { map } from "@thi.ng/transducers"
 import { identity } from "../core";
 
 
-const emitOnStream = (stream: Subscription<any, any>, parsingFn: (n: string) => any = identity) => (e: Event) =>
-    stream.next(parsingFn((<HTMLInputElement>e.target).value))
+const emitOnStream = (stream: Subscription<any, any>, parsingFn: (n: string) => any = identity) => (e: Event) => stream.next(parsingFn((<HTMLInputElement>e.target).value))
+
 
 export const menu = (
     stream: Subscription<any, any>,

@@ -1,6 +1,7 @@
 import { cosineColor, rgbaCss, ReadonlyColor, cosineCoeffs, CosGradientSpec, GRADIENTS } from "@thi.ng/color"
 import { fit } from "@thi.ng/math"
-import { range, map, min, max, mapIndexed } from "@thi.ng/transducers";
+import { range, map, min, max, mapIndexed, repeat, flatten } from "@thi.ng/transducers";
+import { repeatFlat } from "./iter";
 
 type ColorScalingFn = (min: number, max: number) => (y: number) => string
 
@@ -17,14 +18,18 @@ export function fitToColor(spec?: any, to?: any): ColorScalingFn {
                 : fitToColor(GRADIENTS['cyan-magenta'])(min, max)(y)
 }
 
-export const genGradient = (corrValues: number[], grad: CosGradientSpec = GRADIENTS['cyan-magenta']) => {
+export const genGradient = (corrValues: number[], grad: CosGradientSpec, overPeriod?: number) => {
+
+    const recurringFactor = overPeriod || 1
+
     const [l, u] = [min(corrValues), max(corrValues)]
-    const n = corrValues.length
+    const correlationsOverPeriod = [...repeatFlat(corrValues, recurringFactor)]
+    const n = correlationsOverPeriod.length
 
     return [...mapIndexed((index, value): [number, string] => {
         const t = fit(value, l, u, 0, 1)
         return [index / n, rgbaCss(cosineColor(grad, t))]
-    }, corrValues)]
+    }, correlationsOverPeriod)]
 }
 
 export function mapBarHeightFactory(opt: 'abs' | 'minmax', chartH: number) {
