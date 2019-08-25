@@ -1,5 +1,5 @@
-import { sync, stream, fromEvent, fromPromise, fromIterable } from "@thi.ng/rstream"
-import { map, comp, filter, mapcat, mapIndexed, range, zip, min, max, pairs, Range } from "@thi.ng/transducers"
+import { sync, stream, fromEvent, fromPromise } from "@thi.ng/rstream"
+import { map, comp, filter, mapcat, range, zip, min, max, Range } from "@thi.ng/transducers"
 import { fit } from '@thi.ng/math'
 import { canvas } from '@thi.ng/hdom-canvas'
 import { updateDOM } from '@thi.ng/transducers-hdom'
@@ -13,12 +13,8 @@ import { AIC } from "./utils/time-series/aic"
 import { fitToColor, mapBarHeightFactory, genGradient } from "./utils/scales"
 import { menu, h1, h2 } from "./components/ui";
 import { AUTOCORR_SCALES_OPT, LAGS } from "./constants/ui-constants";
-
-const URL = 'https://gist.githubusercontent.com/NoFishLikeIan/0c7f070b056773ca5294bb9767fcbc23/raw/996f26fc4792eb47e252d3cd10c9ecb3f0599722/melbourne.csv'
-const PERIODS = 20
-const MARGIN_X = 30
-const MARGIN_Y = 60
-const AIC_BAR_H = 10
+import { autocorrelationGraph } from "./components/autocorrelation";
+import { URL, MARGIN_X, MARGIN_Y, PERIODS } from "./constants/data-const";
 
 const GRADIENT = GRADIENTS['cyan-magenta']
 const fitToOrangeBlue = fitToColor(GRADIENT)
@@ -82,7 +78,7 @@ const chart = sync<any, any>({
     const chartH = height - 2 * MARGIN_Y
     const by = height - MARGIN_Y
 
-    const [firstBase] = map((p) => MARGIN_Y + p, positionGraph(graphs.length, by))
+    const [_, secondBase] = map((p) => MARGIN_Y + p, positionGraph(graphs.length, by))
 
     const mapXBar = (x: number) =>
       fit(x, 0, autocorrelation.length, MARGIN_X, chartW - MARGIN_X)
@@ -94,33 +90,24 @@ const chart = sync<any, any>({
     const barWidth = 5 // FIXME: dynamic
     const iter = zip(autocorrelation, orderSelection) as Iterable<[number, number]>
 
-    const from = [MARGIN_X, firstBase]
-    const to = [chartW - MARGIN_X - barWidth, firstBase]
+
 
     const gradients = [...genGradient(orderSelection, GRADIENT)]
 
     return [canvas, { width, height },
-      ["defs", {}, ['linearGradient', { id: 'aic', from, to }, gradients],],
-      ["rect", { fill: '$aic' }, from, to[0] - from[0], AIC_BAR_H],
-
-      mapIndexed(
-        (index, [corr, order]: [number, number]) => {
-          const fill = mapColor(order)
-          const x = mapXBar(index)
-          const barHeight = mapBarHeight(corr, min(autocorrelation), max(autocorrelation))
-          const pos = Math.sign(-barHeight)
-          const barOffset = pos < 0 ? 1 : 0
-
-          return ([
-            // Autocorrelation graph
-            ['g', {},
-              ['rect', { fill }, [x, firstBase + barOffset * AIC_BAR_H], barWidth, barHeight],
-              ["text", { fill: 'black', fontSize: 7 }, [x - barWidth / 2, firstBase + (pos * (AIC_BAR_H + 20))], `-${[...lags].length - index}`]
-            ],
-          ])
-        },
-        iter
-      ),
+      ...autocorrelationGraph({
+        min: min(autocorrelation),
+        max: max(autocorrelation),
+        gradients,
+        base: secondBase,
+        barWidth,
+        mapColor,
+        mapXBar,
+        mapBarHeight,
+        label: (index: number) => [...lags].length - index,
+        iter,
+        chartW
+      })
 
 
     ]
