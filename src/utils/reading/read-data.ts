@@ -1,8 +1,8 @@
 import * as tx from '@thi.ng/transducers'
 import { isNumber } from '@thi.ng/checks'
 
-import { CSVData } from "./read-csv";
-import { extendedReduce } from "../../core";
+import { CSVData } from "./read-csv"
+import { extendedReduce } from "../../core"
 
 const isNumericString = (s: string) => isNumber(s) || s.match(/^\d+$/) !== null
 

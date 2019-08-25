@@ -1,5 +1,5 @@
 import { cosineColor, rgbaCss, ReadonlyColor, cosineCoeffs, CosGradientSpec, GRADIENTS } from "@thi.ng/color"
-import { fit } from "@thi.ng/math";
+import { fit } from "@thi.ng/math"
 
 type ColorScalingFn = (min: number, max: number) => (y: number) => string
 

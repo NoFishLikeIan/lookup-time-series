@@ -1,8 +1,8 @@
-import { NVariateData, Univariate, isUnivariate, isMultiVariate } from "../../types";
-import { mean, reduce, Reducer, transduce, map, push, range } from "@thi.ng/transducers";
-import { first } from "../reading";
-import { identity } from "../../core";
-import { sumPairs } from "../transducers";
+import { NVariateData, Univariate, isUnivariate, isMultiVariate } from "../../types"
+import { mean, reduce, Reducer, transduce, map, push, range } from "@thi.ng/transducers"
+import { first } from "../reading"
+import { identity } from "../../core"
+import { sumPairs } from "../transducers"
 
 const initAcc = (n: number) => map(_ => 0, range(n))
 

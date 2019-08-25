@@ -1,7 +1,7 @@
-import { residualSquared } from "./regression";
-import { sum } from "../reducers";
+import { residualSquared } from "./regression"
+import { sum } from "../reducers"
 import { reduce, zip } from '@thi.ng/transducers'
-import { takeAfter, takeMinus } from "../transducers";
+import { takeAfter, takeMinus } from "../transducers"
 
 const genShiftedPairs = (obs: number[], lag: number) => zip(takeMinus(lag, obs), takeAfter(lag, obs))
 

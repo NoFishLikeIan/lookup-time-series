@@ -1,8 +1,8 @@
-import { Reducer, comp, transduce, mapIndexed, reduce, map, push, zip, last } from '@thi.ng/transducers';
-import { identity, constant } from '../../core';
-import { NVariateData } from '../../types';
-import { nVariateMeans } from './mean';
-import { first, isFilled } from '../reading';
+import { Reducer, comp, transduce, mapIndexed, reduce, map, push, zip, last } from '@thi.ng/transducers'
+import { identity, constant } from '../../core'
+import { NVariateData } from '../../types'
+import { nVariateMeans } from './mean'
+import { first, isFilled } from '../reading'
 
 const cov = (xbar: number) => (ybar: number): Reducer<number, number[]> => [
     constant(0),

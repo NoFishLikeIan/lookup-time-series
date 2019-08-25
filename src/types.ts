@@ -1,6 +1,6 @@
-import { first } from "./utils/reading";
+import { first } from "./utils/reading"
 
-export type ThenArg<T> = T extends Promise<infer U> ? U : T;
+export type ThenArg<T> = T extends Promise<infer U> ? U : T
 
 export type Univariate = Iterable<number>
 export type NVariateData = Iterable<number[]>
