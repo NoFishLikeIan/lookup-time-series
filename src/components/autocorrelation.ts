@@ -43,7 +43,7 @@ export const autocorrBarchart = ({
                 const x = mapXBar(index)
                 const barHeight = mapBarHeight(corr, min, max)
                 const pos = Math.sign(-barHeight)
-                const barOffset = pos < 0 ? 1 : 0
+                const barOffset = pos <= 0 ? 1 : 0
 
 
 

@@ -74,7 +74,7 @@ const chart = sync<any, any>({
     lags,
     orderSelection,
     window: fromEvent(window, "resize").transform(
-      map(() => [window.innerWidth, window.innerHeight])
+      map(() => [window.innerWidth, window.innerHeight * 0.9])
     )
   },
   xform: map(({ graphs, window, autocorrScales, lags, orderSelection }) => {
@@ -124,7 +124,7 @@ const chart = sync<any, any>({
     })
 
 
-    return [canvas, { width, height },
+    return [canvas, { width: width, height },
       ['defs', {}, barDef, lineDef,],
       autocorrelationGraph,
       priceGraph
